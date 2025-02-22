@@ -1,0 +1,54 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Navbar */
+.navbar {
+    padding: 10px 15px;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Button Styling */
+.btn-light {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-light:hover {
+    background-color: #eaeaea;
+}
+
+/* Content Container */
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+}
+
+.dark-mode .navbar {
+    background-color: #333 !important;
+}
+
+.dark-mode .btn-light {
+    background-color: #555;
+    color: white;
+    border: 1px solid #777;
+}
+
+.dark-mode .btn-light:hover {
+    background-color: #777;
+}

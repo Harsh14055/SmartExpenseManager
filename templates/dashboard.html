@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+        <script>
+            function printPage() {
+                window.print();
+            }
+            function confirmDelete() {
+                if (confirm("Are you sure you want to delete your account? This action cannot be undone!")) {
+                    window.location.href = "{{ url_for('delete_account') }}";
+                }
+            }
+            function editDescription(expenseId) {
+                document.getElementById("desc-text-" + expenseId).style.display = "none";
+                document.getElementById("desc-input-" + expenseId).style.display = "inline-block";
+                document.getElementById("edit-btn-" + expenseId).style.display = "none";
+                document.getElementById("save-btn-" + expenseId).style.display = "inline-block";
+                document.getElementById("desc-input-" + expenseId).focus();
+            }
+            
+            function saveDescription(expenseId) {
+                let newDescription = document.getElementById("desc-input-" + expenseId).value;
+
+                fetch('/update_expense/' + expenseId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description: newDescription })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("desc-text-" + expenseId).innerText = newDescription;
+                        document.getElementById("desc-text-" + expenseId).style.display = "inline-block";
+                        document.getElementById("desc-input-" + expenseId).style.display = "none";
+                        document.getElementById("edit-btn-" + expenseId).style.display = "inline-block";
+                        document.getElementById("save-btn-" + expenseId).style.display = "none";
+                    } else {
+                        alert("Error updating description!");
+                    }
+                });
+            }
+        </script>
+    </head>
+    
+    <body id="print-area">
+    <!-- Navbar -->
+<nav class="navbar">
+    <h2>Smart Expense Tracker</h2>
+    <div class="nav-buttons">
+        <a class="btn btn-danger" onclick="confirmDelete()">Delete Account</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </div>
+</nav>
+
+    <h2>Welcome, {{ current_user.username }}!</h2>
+
+    <h3>Total Expenses: Rs {{ total_expenses }}</h3>
+
+    <a href="{{ url_for('expense.add_expense') }}">Add Expense</a>
+    <button id="print-btn" onclick="printPage()">Print / Save as PDF</button>
+    
+    <h3>Recent Expenses:</h3>
+    <table class="expense-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount (Rs)</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.amount }}</td>
+                <td>
+                    <span id="desc-text-{{ expense.id }}">{{ expense.description }}</span>
+                    <input type="text" id="desc-input-{{ expense.id }}" 
+                           value="{{ expense.description }}" style="display:none;">
+                </td>
+                <td>
+                    <button class="edit-btn" id="edit-btn-{{ expense.id }}" onclick="editDescription({{ expense.id }})">Edit</button>
+                    <button class="save-btn" id="save-btn-{{ expense.id }}" onclick="saveDescription({{ expense.id }})" 
+                            style="display:none;">Save</button>
+
+                    <form method="POST" action="{{ url_for('expense.delete_expense', expense_id=expense.id) }}" style="display:inline;">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Monthly Total Expenses:</h3>
+<table class="expense-table">
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Total Amount (Rs)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for month, total in monthly_totals.items() %}
+        <tr>
+            <td>{{ month }}</td>
+            <td>Rs {{ total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    <h3>Expense Distribution:</h3>
+    {{ pie_chart_html | safe }}
+
+    <h3>Monthly Expenses:</h3>
+    {{ bar_chart_html | safe }}
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+    
+</body>
+</html>

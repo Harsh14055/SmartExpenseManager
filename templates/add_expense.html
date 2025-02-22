@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_expense.css') }}">
+    <script>
+        function predictCategory() {
+            const description = document.getElementById("description").value;
+            if (description.length > 2) {  // Avoid unnecessary requests for very short input
+                fetch("/predict_category", {
+                    method: "POST",
+                    body: JSON.stringify({ description: description }),
+                    headers: { "Content-Type": "application/json" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("category").value = data.predicted_category;
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="expense-container">
+        <h2>Add Expense</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+    
+            <div class="form-group">
+                {{ form.amount.label }} 
+                {{ form.amount(class="input-field") }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.category.label }} 
+                {{ form.category(class="input-field", id="category") }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.description.label }} 
+                {{ form.description(class="input-field", id="description", onkeyup="predictCategory()") }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.date.label }} 
+                {{ form.date(class="input-field", type="date") }} <!-- Manual Date Input -->
+            </div>
+    
+            <div class="form-group">
+                {{ form.submit(class="submit-btn") }}
+            </div>
+        </form>
+        <a class="back-link" href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>
