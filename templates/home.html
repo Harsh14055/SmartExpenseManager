@@ -3,9 +3,12 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1>Welcome to Smart Expense Tracker</h1>
-    <p>Track your expenses easily with our app.</p>
-    <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Get Started</a>
+<div class="home-container">
+    <div class="overlay"></div>
+    <div class="content text-center">
+        <h1>Welcome to Smart Expense Tracker</h1>
+        <p>Track your expenses easily with our app.</p>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Get Started</a>
+    </div>
 </div>
 {% endblock %}

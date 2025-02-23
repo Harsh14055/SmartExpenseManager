@@ -49,6 +49,7 @@
 <nav class="navbar">
     <h2>Smart Expense Tracker</h2>
     <div class="nav-buttons">
+        <a href="{{ url_for('finance_news') }}" class="btn">Finance News</a>
         <a class="btn btn-danger" onclick="confirmDelete()">Delete Account</a>
         <a href="{{ url_for('auth.logout') }}">Logout</a>
     </div>

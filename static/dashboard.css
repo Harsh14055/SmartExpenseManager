@@ -1,25 +1,27 @@
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #2b2b2b;
+    background: url('dashboardbg.jpg') no-repeat center center fixed;
     margin: 0;
     padding: 20px;
     text-align: center;
+    color: #dcdcdc;
 }
 
 /* Page Container */
 .dashboard-container {
     max-width: 900px;
     margin: 0 auto;
-    background: white;
+    background: #3a3a3a;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Headings */
 h2, h3 {
-    color: #2c3e50;
+    color: #f1c40f;
     margin-bottom: 15px;
 }
 
@@ -28,16 +30,15 @@ a ,#print-btn{
     display: inline-block;
     margin-top: 15px;
     padding: 10px 15px;
-    background-color: #3498db;
+    background-color: #9b59b6;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    
 }
 
 a:hover,#print-btn:hover {
-    background-color: #2980b9;
+    background-color: #8e44ad;
 }
 
 /* Expense Table */
@@ -46,25 +47,26 @@ a:hover,#print-btn:hover {
     max-width: 800px;
     margin: 20px auto;
     border-collapse: collapse;
-    background: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: #444;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     overflow: hidden;
     text-align: left;
+    color: white;
 }
 
 .expense-table th, .expense-table td {
     padding: 12px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #555;
 }
 
 .expense-table th {
-    background-color: #3498db;
+    background-color: #9b59b6;
     color: white;
 }
 
 .expense-table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #555;
 }
 
 /* Total Expenses */
@@ -75,9 +77,11 @@ a:hover,#print-btn:hover {
     display: block;
     margin-top: 15px;
 }
+
 /* Navbar Styling */
 .navbar {
-    background-color: #007bff; /* Primary Blue */
+    background-color: #1f1f1f;
+    opacity: 0.75;
     padding: 15px 20px;
     display: flex;
     align-items: center;
@@ -85,7 +89,7 @@ a:hover,#print-btn:hover {
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
 
@@ -93,14 +97,13 @@ a:hover,#print-btn:hover {
 .navbar-brand {
     font-size: 22px;
     font-weight: bold;
-    color: white;
+    color: #f1c40f;
     text-decoration: none;
     transition: 0.3s;
-    
 }
 
 .navbar-brand:hover {
-    color: #f8f9fa; /* Light Grey */
+    color: #f39c12;
 }
 
 /* Navbar Right Section */
@@ -108,13 +111,15 @@ a:hover,#print-btn:hover {
     display: flex;
     gap: 10px;
 }
+
 .navbar a{
-    background-color: red;
+    background-color: #e74c3c;
 }
+
 /* Navbar Buttons */
 .navbar .btn {
-    background-color: white;
-    color: #007bff;
+    background-color: #9b59b6;
+    color: white;
     padding: 8px 15px;
     border-radius: 5px;
     text-decoration: none;
@@ -125,7 +130,7 @@ a:hover,#print-btn:hover {
 }
 
 .navbar .btn:hover {
-    background-color: #0056b3;
+    background-color: #8e44ad;
     color: white;
     border: 2px solid white;
 }
@@ -154,10 +159,10 @@ a:hover,#print-btn:hover {
 #pie-chart, #bar-chart {
     width: 45%;
     min-width: 300px;
-    background-color: white;
+    background-color: #444;
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Logout Button */
@@ -186,8 +191,9 @@ a:hover,#print-btn:hover {
         width: 90%;
     }
 }
+
 .delete-btn {
-    background-color: red;
+    background-color: #e74c3c;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -196,8 +202,9 @@ a:hover,#print-btn:hover {
 }
 
 .delete-btn:hover {
-    background-color: darkred;
+    background-color: #c0392b;
 }
+
 .desc-input {
     width: 100%;
     padding: 5px;
@@ -206,7 +213,7 @@ a:hover,#print-btn:hover {
 }
 
 .edit-btn, .save-btn {
-    background-color: #007bff;
+    background-color: #9b59b6;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -215,9 +222,8 @@ a:hover,#print-btn:hover {
 }
 
 .edit-btn:hover, .save-btn:hover {
-    background-color: #0056b3;
+    background-color: #8e44ad;
 }
-
 
 @media print {
     body * {

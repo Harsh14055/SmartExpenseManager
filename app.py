@@ -11,6 +11,7 @@ from datetime import datetime
 from collections import defaultdict
 import joblib  # For loading the ML model
 from auth import ExpenseForm  # Import expense form
+import requests
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -129,6 +130,20 @@ def update_expense(expense_id):
         return jsonify({"success": True})
 
     return jsonify({"success": False}), 400
+NEWS_API_KEY = "b863f8b5f9594cbb8b9ed71ae4b3aa07"  # Replace with your API key
+
+def get_finance_news():
+    url = f"https://newsapi.org/v2/top-headlines?category=business&apiKey={NEWS_API_KEY}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json().get("articles", [])
+    return []
+
+@app.route('/finance-news')
+@login_required
+def finance_news():
+    news_articles = get_finance_news()
+    return render_template("finance_news.html", news_articles=news_articles)
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create database tables

@@ -1,36 +1,74 @@
 /* General Styles */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: #2b2b2b;
+    color: #dcdcdc;
     transition: background-color 0.3s ease, color 0.3s ease;
+    background: url('homebg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+}
+
+/* Overlay for better text readability */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
 }
 
 /* Navbar */
 .navbar {
-    padding: 10px 15px;
+    padding: 12px 20px;
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid #f1c40f;
+    position: relative;
+    z-index: 2;
 }
 
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
+    color: #f1c40f;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+    color: #f39c12;
 }
 
 /* Button Styling */
 .btn-light {
-    background-color: #ffffff;
-    color: #333;
-    border: 1px solid #ddd;
+    background-color: #007BFF;
+    color: white;
+    border-color: #f1c40f;
+    /* border: none; */
+    border-width: 4px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
 }
 
 .btn-light:hover {
-    background-color: #eaeaea;
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 }
 
 /* Content Container */
 .container {
-    max-width: 900px;
+    /* max-width: 900px;
     margin: auto;
+    background: rgba(58, 58, 58, 0.9); 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1; */
 }
 
 /* Dark Mode */
@@ -51,4 +89,64 @@ body {
 
 .dark-mode .btn-light:hover {
     background-color: #777;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .navbar {
+        padding: 8px 10px;
+    }
+
+    .btn-light {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* Background Image with Overlay */
+.home-container {
+    position: relative;
+    background: url('homebg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: #f39c12;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #e67e22;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
 }
