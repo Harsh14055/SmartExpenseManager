@@ -1,0 +1,116 @@
+<!-- Floating Chatbot Button and Window -->
+<div id="chatbot-container">
+    <button id="chatbot-toggle">💬 Chat</button>
+    <div id="chatbot-window">
+        <div id="chatbot-header">Smart Expense Chatbot <span id="close-chat">✖</span></div>
+        <div id="chatbot-messages"></div>
+        <input type="text" id="chatbot-input" placeholder="Type a message..." />
+        <button id="chatbot-send">Send</button>
+    </div>
+</div>
+
+<style>
+    /* Floating Chatbot Styles */
+    #chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    #chatbot-toggle {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+    #chatbot-window {
+        display: none;
+        width: 300px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        padding: 10px;
+        position: absolute;
+        bottom: 50px;
+        right: 0;
+    }
+    #chatbot-header {
+        font-weight: bold;
+        padding: 5px;
+        text-align: center;
+        background: #007bff;
+        color: white;
+        border-radius: 5px 5px 0 0;
+    }
+    #close-chat {
+        float: right;
+        cursor: pointer;
+    }
+    #chatbot-messages {
+        height: 200px;
+        overflow-y: auto;
+        border-bottom: 1px solid #ccc;
+        padding: 5px;
+    }
+    #chatbot-input {
+        width: calc(100% - 60px);
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    #chatbot-send {
+        width: 50px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    document.getElementById("chatbot-toggle").addEventListener("click", function() {
+        document.getElementById("chatbot-window").style.display = "block";
+    });
+    document.getElementById("close-chat").addEventListener("click", function() {
+        document.getElementById("chatbot-window").style.display = "none";
+    });
+    document.getElementById("chatbot-send").addEventListener("click", function() {
+        sendMessage();
+    });
+    document.getElementById("chatbot-input").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") sendMessage();
+    });
+    
+    function sendMessage() {
+        let inputField = document.getElementById("chatbot-input");
+        let message = inputField.value.trim();
+        if (!message) return;
+        
+        // Display user message
+        let messageContainer = document.getElementById("chatbot-messages");
+        let userMessage = document.createElement("div");
+        userMessage.style.textAlign = "right";
+        userMessage.innerHTML = `<p><b>You:</b> ${message}</p>`;
+        messageContainer.appendChild(userMessage);
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+        
+        // Send message to chatbot API
+        fetch("/chatbot/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            let botMessage = document.createElement("div");
+            botMessage.innerHTML = `<p><b>Bot:</b> ${data.response}</p>`;
+            messageContainer.appendChild(botMessage);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        });
+        
+        inputField.value = "";
+    }
+</script>

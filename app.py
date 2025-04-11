@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash,jsonify
+from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import LoginManager, login_required, current_user
 from config import SQLALCHEMY_DATABASE_URI, SECRET_KEY
 from models import db, Expense
@@ -12,9 +12,14 @@ from collections import defaultdict
 import joblib  # For loading the ML model
 from auth import ExpenseForm  # Import expense form
 import requests
+from chatbot import chatbot_bp  # Import chatbot blueprint
+from transformers import pipeline
+from utils import calculate_last_month_expense, calculate_today_expense, get_biggest_expense
 
-# Initialize Flask app
 app = Flask(__name__)
+
+# Load NLP model (Can replace with a better model later)
+qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-small")
 
 # Configure app
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
@@ -26,6 +31,7 @@ db.init_app(app)
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/auth')  # Register auth blueprint
 app.register_blueprint(expense_bp)
+app.register_blueprint(chatbot_bp, url_prefix='/chatbot')  # Register chatbot blueprint
 
 # Flask-Login setup
 login_manager = LoginManager()
@@ -77,6 +83,7 @@ def dashboard():
         pie_chart_html=pie_chart.to_html(full_html=False),
         bar_chart_html=bar_chart.to_html(full_html=False)
     )
+
 @app.route('/delete_account', methods=['GET', 'POST'])
 @login_required
 def delete_account():
@@ -119,6 +126,7 @@ def predict_category():
         category = model.predict([description])[0]  # Predict category
         return {'category': category}
     return {'category': 'Unknown'}
+
 @app.route('/update_expense/<int:expense_id>', methods=['POST'])
 def update_expense(expense_id):
     data = request.get_json()
@@ -130,7 +138,8 @@ def update_expense(expense_id):
         return jsonify({"success": True})
 
     return jsonify({"success": False}), 400
-NEWS_API_KEY = "b863f8b5f9594cbb8b9ed71ae4b3aa07"  # Replace with your API key
+
+NEWS_API_KEY = "b863f8b5f9594cbb8b9ed71ae4b3aa07"  # Replace with your API key or load from config
 
 def get_finance_news():
     url = f"https://newsapi.org/v2/top-headlines?category=business&apiKey={NEWS_API_KEY}"
@@ -144,6 +153,29 @@ def get_finance_news():
 def finance_news():
     news_articles = get_finance_news()
     return render_template("finance_news.html", news_articles=news_articles)
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    data = request.get_json()
+    user_message = data.get("message", "").lower()
+
+    # Example logic for understanding expenses
+    if "spend" in user_message and "last month" in user_message:
+        last_month_expense = calculate_last_month_expense()  # Fetch from DB
+        response_text = f"You spent Rs {last_month_expense} last month."
+    
+    elif "spent today" in user_message:
+        today_expense = calculate_today_expense()  # Fetch from DB
+        response_text = f"You spent Rs {today_expense} today."
+
+    elif "biggest expense" in user_message:
+        biggest_expense = get_biggest_expense()  # Fetch from DB
+        response_text = f"Your biggest expense was {biggest_expense['category']} with Rs {biggest_expense['amount']}."
+
+    else:
+        response_text = "I'm still learning! Try asking about your expenses."
+
+    return jsonify({"response": response_text})
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create database tables
